@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { ITrefleSpecies } from "./data/interfaces/ITrefleSpecies";
 import { IPlantNetSpecies } from "./data/interfaces/IPlantNetSpecies";
-import { Button } from "@/components/ui/button";
+import Carrousel from "./components/Carrousel";
+import Answer from "./components/Answer";
 
 const App: React.FC = () => {
   const [trefleSpecies, setTrefleSpecies] = useState<ITrefleSpecies | null>();
@@ -77,10 +78,24 @@ const App: React.FC = () => {
   }
 
   if (trefleSpecies !== null || plantNetSpecies !== null) {
-    return (
-      <>
+    const images = () => {
+      const imagesList = [];
+      if (trefleSpecies?.image_url) {
+        imagesList.push(trefleSpecies.image_url);
+      }
+      if (plantNetSpecies?.images) {
+        plantNetSpecies.images.map((image) => {
+          imagesList.push(image.o);
+        });
+      }
+      return imagesList;
+    };
 
-        <p>
+    return (
+      <div className="app w-screen h-screen flex justify-center items-center gap-4 p-8">
+        <Carrousel images={images()} />
+        <Answer/>
+        {/* <p>
           {trefleSpecies?.scientific_name} ({trefleSpecies?.id})
         </p>
         <p>{trefleSpecies?.common_name}</p>
@@ -106,8 +121,8 @@ const App: React.FC = () => {
           />
         ) : (
           <></>
-        )}
-      </>
+        )} */}
+      </div>
     );
   }
 
