@@ -168,9 +168,8 @@ export const getWikipediaArticle = async (req: Request, res: Response) => {
         const scientificNameExtract =
           scientificNameData.query.pages[scientificNamePageId].extract;
         if (
-          !scientificNameExtract
-            .split("<!--")[0]
-            .includes("Portail de la botanique")
+          !scientificNameExtract.split("<!--")[0].includes("Portail de") &&
+          scientificNameExtract.split("<!--")[0] !== ""
         ) {
           scientificNameSuccessful = true; // Set the flag to true
           res
@@ -213,9 +212,18 @@ export const getWikipediaArticle = async (req: Request, res: Response) => {
         commonNameData.query.pages[commonNamePageId].extract;
 
       if (commonNamePageId !== "-1") {
-        res
-          .status(200)
-          .json({ articleContent: commonNameExtract.split("<!--")[0] });
+        if (
+          !commonNameExtract.split("<!--")[0].includes("Portail de") &&
+          commonNameExtract.split("<!--")[0] !== ""
+        ) {
+          res
+            .status(200)
+            .json({ articleContent: commonNameExtract.split("<!--")[0] });
+        } else {
+          res
+            .status(200)
+            .json({ articleContent: "<p>Données non-disponibles</p>" });
+        }
       } else {
         res
           .status(200)
