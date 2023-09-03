@@ -1,5 +1,6 @@
 import { IPlantNetSpecies } from "@/data/interfaces/IPlantNetSpecies";
 import AnswerItem from "./components/AnswerItem";
+import { useState } from "react";
 
 interface IAnswerProps {
   answerList: IPlantNetSpecies[];
@@ -10,30 +11,36 @@ const Answer: React.FC<IAnswerProps> = ({
   answerList,
   goodAnswerScientificName,
 }) => {
+  const [foundGoodAnswer, setFoundGoodAnswer] = useState(false);
+
   return answerList ? (
     <div className="answer-container h-1/2 flex flex-col basis-1/2 gap-4">
-      <div className="flex flex-row h-full w-full gap-4">
+      <div className="flex flex-row gap-4 h-full w-full">
         <AnswerItem
-          scientificName={answerList[0].name}
-          commonName={answerList[0].commonNames}
+          answer={answerList[0]}
           goodAnswerScientificName={goodAnswerScientificName}
+          foundGoodAnswer={foundGoodAnswer}
+          setFoundGoodAnswer={setFoundGoodAnswer}
         />
         <AnswerItem
-          scientificName={answerList[1].name}
-          commonName={answerList[1].commonNames}
+          answer={answerList[1]}
           goodAnswerScientificName={goodAnswerScientificName}
+          foundGoodAnswer={foundGoodAnswer}
+          setFoundGoodAnswer={setFoundGoodAnswer}
         />
       </div>
-      <div className="flex flex-row h-full w-full gap-4">
+      <div className="flex flex-row gap-4 h-full w-full">
         <AnswerItem
-          scientificName={answerList[2].name}
-          commonName={answerList[2].commonNames}
+          answer={answerList[2]}
           goodAnswerScientificName={goodAnswerScientificName}
+          foundGoodAnswer={foundGoodAnswer}
+          setFoundGoodAnswer={setFoundGoodAnswer}
         />
         <AnswerItem
-          scientificName={answerList[3].name}
-          commonName={answerList[3].commonNames}
+          answer={answerList[3]}
           goodAnswerScientificName={goodAnswerScientificName}
+          foundGoodAnswer={foundGoodAnswer}
+          setFoundGoodAnswer={setFoundGoodAnswer}
         />
       </div>
     </div>
