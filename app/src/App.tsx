@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IPlantNetSpecies } from "./data/interfaces/IPlantNetSpecies";
-import Carrousel from "./components/Carrousel";
 import Answer from "./components/Answer";
+import Carrousel from "./components/Carrousel";
 
 const App: React.FC = () => {
   const [answerList, setAnswerList] = useState<IPlantNetSpecies[]>();
@@ -27,7 +27,7 @@ const App: React.FC = () => {
           console.log("Erreur de réponse du serveur - PlantNet");
         }
       } catch (error) {
-        console.log("Erreur lors de la requête fetch:", error);
+        console.log("Erreur lors de la requête fetch (PlantNet):", error);
       }
     };
 

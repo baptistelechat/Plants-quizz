@@ -39,7 +39,7 @@ export const getAllPlant = async (req: Request, res: Response) => {
   }
 };
 
-// get random answers
+// GET random answers
 export const getRandomPlant = async (req: Request, res: Response) => {
   const answerNumber = req.params.answerNumber;
   const speciesPerPage = 20;
@@ -95,8 +95,6 @@ export const getRandomPlant = async (req: Request, res: Response) => {
       const trefleSpeciesList = (await response.json()) as ITrefleSpeciesList;
       const trefleSpecies = trefleSpeciesList.data[plantIndex];
 
-      console.log(trefleSpecies.image_url)
-
       try {
         const response = await fetch(
           plantNetApiUrl(trefleSpecies.scientific_name),
@@ -138,5 +136,97 @@ export const getRandomPlant = async (req: Request, res: Response) => {
       path: `${req.originalUrl} - Get all plants`,
       errorMessage: error, // Send the error message
     });
+  }
+};
+
+// Get Wikipedia data
+export const getWikipediaArticle = async (req: Request, res: Response) => {
+  const scientificName = req.params.scientificName;
+  const commonName = req.params.commonName;
+
+  const scientificNameApiUrl = `https://fr.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&titles=${scientificName}&exintro=1`;
+  const commonNameApiUrl = `https://fr.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&titles=${commonName}&exintro=1`;
+  const headers = {
+    Accept: "*/*",
+  };
+
+  let scientificNameSuccessful = false; // Flag to indicate if scientific name fetch was successful
+
+  try {
+    const scientificNameResponse = await fetch(scientificNameApiUrl, {
+      method: "GET",
+      headers,
+    });
+
+    if (scientificNameResponse.ok) {
+      const scientificNameData = await scientificNameResponse.json();
+      const scientificNamePageId = Object.keys(
+        scientificNameData.query.pages
+      )[0];
+
+      if (scientificNamePageId !== "-1") {
+        const scientificNameExtract =
+          scientificNameData.query.pages[scientificNamePageId].extract;
+        if (
+          !scientificNameExtract
+            .split("<!--")[0]
+            .includes("Portail de la botanique")
+        ) {
+          scientificNameSuccessful = true; // Set the flag to true
+          res
+            .status(200)
+            .json({ articleContent: scientificNameExtract.split("<!--")[0] });
+        }
+      }
+    }
+  } catch (error) {
+    // Handle errors for scientific name fetch
+    res.status(404).json({
+      path: `${req.originalUrl} - Get Wikipedia Article (ScientificName)`,
+      errorMessage: error, // Send the error message
+    });
+  }
+
+  // Only if scientificName fetch fails or doesn't return a result, proceed with commonName fetch
+  if (!scientificNameSuccessful) {
+    if (commonName === "-") {
+      res
+        .status(200)
+        .json({ articleContent: "<p>Données non-disponibles</p>" });
+      return;
+    }
+    try {
+      const commonNameResponse = await fetch(commonNameApiUrl, {
+        method: "GET",
+        headers,
+      });
+
+      if (!commonNameResponse.ok) {
+        throw new Error(
+          `Error fetching common name data: ${commonNameResponse.status}`
+        );
+      }
+
+      const commonNameData = await commonNameResponse.json();
+      const commonNamePageId = Object.keys(commonNameData.query.pages)[0];
+      const commonNameExtract =
+        commonNameData.query.pages[commonNamePageId].extract;
+
+      if (commonNamePageId !== "-1") {
+        res
+          .status(200)
+          .json({ articleContent: commonNameExtract.split("<!--")[0] });
+      } else {
+        res
+          .status(200)
+          .json({ articleContent: "<p>Données non-disponibles</p>" });
+      }
+    } catch (error) {
+      // Handle errors for common name fetch
+      res.status(404).json({
+        path: `${req.originalUrl} - Get Wikipedia Article (CommonName)`,
+        errorMessage: error, // Send the error message
+      });
+    }
   }
 };
