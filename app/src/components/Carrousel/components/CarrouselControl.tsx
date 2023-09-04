@@ -32,7 +32,7 @@ const CarrouselControl: React.FC<ICarrouselControlProps> = ({
   };
 
   return (
-    <div className="carrousel-control flex flex-row gap-4">
+    <div className="flex flex-row gap-4 carrousel-control">
       <Button
         disabled={imageIndex === 0}
         variant="outline"

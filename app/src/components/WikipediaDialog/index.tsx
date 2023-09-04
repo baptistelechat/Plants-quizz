@@ -49,10 +49,10 @@ const WikipediaDialog: React.FC<IWikipediaModalProps> = ({ answer }) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant={"secondary"} onClick={handleGetArticleContent}>
-          <BadgeInfo className="mr-2 h-4 w-4" /> En savoir plus
+          <BadgeInfo className="w-4 h-4 mr-2" /> En savoir plus
         </Button>
       </DialogTrigger>
-      <DialogContent >
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>{`${answer.name} ${
             answer.commonNames !== undefined ? `(${answer.commonNames})` : ""
@@ -63,17 +63,16 @@ const WikipediaDialog: React.FC<IWikipediaModalProps> = ({ answer }) => {
               : ""}
           </DialogDescription>
         </DialogHeader>
-        <div className="dialogContent flex flex-col justify-center items-start gap-2">
-          <div className="scrollAreaContainer flex flex-row gap-4">
+        <div className="flex flex-col items-start justify-center gap-2 dialogContent">
+          <div className="flex flex-row gap-4 scrollAreaContainer">
             <ScrollArea className="h-[300px] w-full rounded-md border p-4">
               <div dangerouslySetInnerHTML={{ __html: articleContent }} />
             </ScrollArea>
             <ScrollArea className="h-[300px] w-full rounded-md border p-4">
-              <div className="imagesContainer flex flex-col gap-4">
-              {answer.images.map((image) => (
-                <img src={image} />
-              ))}
-
+              <div className="flex flex-col gap-4 imagesContainer">
+                {answer.images.map((image) => (
+                  <img src={image} />
+                ))}
               </div>
             </ScrollArea>
           </div>

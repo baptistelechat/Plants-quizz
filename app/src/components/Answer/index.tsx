@@ -14,8 +14,8 @@ const Answer: React.FC<IAnswerProps> = ({
   const [foundGoodAnswer, setFoundGoodAnswer] = useState(false);
 
   return answerList ? (
-    <div className="answer-container h-1/2 flex flex-col basis-1/2 gap-4">
-      <div className="flex flex-row gap-4 h-full w-full">
+    <div className="flex flex-col gap-4 answer-container h-1/2 basis-1/2">
+      <div className="flex flex-row w-full h-full gap-4">
         <AnswerItem
           answer={answerList[0]}
           goodAnswerScientificName={goodAnswerScientificName}
@@ -29,7 +29,7 @@ const Answer: React.FC<IAnswerProps> = ({
           setFoundGoodAnswer={setFoundGoodAnswer}
         />
       </div>
-      <div className="flex flex-row gap-4 h-full w-full">
+      <div className="flex flex-row w-full h-full gap-4">
         <AnswerItem
           answer={answerList[2]}
           goodAnswerScientificName={goodAnswerScientificName}

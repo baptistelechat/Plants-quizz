@@ -47,7 +47,7 @@ const App: React.FC = () => {
     const goodAnswerIndex = Math.floor(Math.random() * 4); // Generates 0, 1, 2, or 3
 
     return (
-      <div className="app w-screen h-screen flex justify-center items-center gap-4 p-8">
+      <div className="flex items-center justify-center w-screen h-screen gap-4 app">
         <Carrousel images={answerList[goodAnswerIndex].images} />
         <Answer
           answerList={answerList}
