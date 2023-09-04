@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { BadgeInfo } from "lucide-react";
 import { IPlantNetSpecies } from "@/data/interfaces/IPlantNetSpecies";
+import Carrousel from "../Carrousel";
 
 interface IWikipediaModalProps {
   answer: IPlantNetSpecies;
@@ -52,7 +53,7 @@ const WikipediaDialog: React.FC<IWikipediaModalProps> = ({ answer }) => {
           <BadgeInfo className="w-4 h-4 mr-2" /> En savoir plus
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>{`${answer.name} ${
             answer.commonNames !== undefined ? `(${answer.commonNames})` : ""
@@ -64,17 +65,11 @@ const WikipediaDialog: React.FC<IWikipediaModalProps> = ({ answer }) => {
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-start justify-center gap-2 dialogContent">
-          <div className="flex flex-row gap-4 scrollAreaContainer">
-            <ScrollArea className="h-[300px] w-full rounded-md border p-4">
+          <div className="flex items-center justify-center w-full gap-4 scrollAreaContainer">
+            <ScrollArea className="h-[350px] rounded-md w-full border p-4">
               <div dangerouslySetInnerHTML={{ __html: articleContent }} />
             </ScrollArea>
-            <ScrollArea className="h-[300px] w-full rounded-md border p-4">
-              <div className="flex flex-col gap-4 imagesContainer">
-                {answer.images.map((image) => (
-                  <img src={image} />
-                ))}
-              </div>
-            </ScrollArea>
+            <Carrousel images={answer.images} extraStyle="h-[350px] w-full" />
           </div>
           {!articleContent.includes("Données non-disponible") ? (
             <Button
